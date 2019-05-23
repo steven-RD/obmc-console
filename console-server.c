@@ -328,6 +328,7 @@ static int tty_init(struct console *console, struct config *config)
 
 int console_data_out(struct console *console, const uint8_t *data, size_t len)
 {
+printf("console->tty_fd=%d,%s, %d, %s\n", console->tty_fd, data, __LINE__, __FILE__);
 	return write_buf_to_fd(console->tty_fd, data, len);
 }
 
@@ -706,6 +707,8 @@ int run_console(struct console *console)
 	sighandler_t sighandler_save;
 	struct timeval tv;
 	int rc, timeout;
+	
+printf("%d, %s\n", __LINE__, __FILE__);
 
 	sighandler_save = signal(SIGINT, sighandler);
 
@@ -728,7 +731,7 @@ int run_console(struct console *console)
 		}
 
 		timeout = get_poll_timeout(console, &tv);
-
+printf("%d, %s\n", __LINE__, __FILE__);
 		rc = poll(console->pollfds,
 				console->n_pollers + MAX_INTERNAL_POLLFD,
 				timeout);

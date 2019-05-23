@@ -139,6 +139,7 @@ static enum ringbuffer_poll_ret tty_ringbuffer_poll(void *arg, size_t force_len)
 	struct tty_handler *th = arg;
 	int rc;
 
+printf("%d, %s\n", __LINE__, __FILE__);
 	rc = tty_drain_queue(th, force_len);
 	if (rc) {
 		console_poller_unregister(th->console, th->poller);
@@ -155,7 +156,8 @@ static enum poller_ret tty_poll(struct handler *handler,
 	uint8_t buf[4096];
 	ssize_t len;
 	int rc;
-
+	
+printf("%d, %s\n", __LINE__, __FILE__);
 	if (events & POLLIN) {
 printf("th->fd=%d, %d\n", th->fd, __LINE__);
 		len = read(th->fd, buf, sizeof(buf));
@@ -166,6 +168,7 @@ printf("th->fd=%d, %d\n", th->fd, __LINE__);
 	}
 
 	if (events & POLLOUT) {
+printf("%d, %s\n", __LINE__, __FILE__);
 		tty_set_blocked(th, false);
 		rc = tty_drain_queue(th, 0);
 		if (rc)
@@ -269,12 +272,16 @@ static int tty_init(struct handler *handler, struct console *console,
 
 	if (make_terminal_raw(th, tty_name) != 0)
 		fprintf(stderr, "Couldn't make %s a raw terminal\n", tty_name);
-
+	
+printf("%d, %s\n", __LINE__, __FILE__);
 	th->poller = console_poller_register(console, handler, tty_poll, NULL,
 			th->fd, POLLIN, NULL);
+printf("%d, %s\n", __LINE__, __FILE__);
+
 	th->console = console;
 	th->rbc = console_ringbuffer_consumer_register(console,
 			tty_ringbuffer_poll, th);
+printf("%d, %s\n", __LINE__, __FILE__);
 
 	return 0;
 }

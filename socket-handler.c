@@ -248,12 +248,12 @@ static enum poller_ret client_poll(struct handler *handler,
 		}
 		if (rc == 0)
 			goto err_close;
-printf("client->fd=%d,%s, %d\n", client->fd, buf, __LINE__);
+printf("client->fd=%d,%s, %d, %s\n", client->fd, buf, __LINE__, __FILE__);
 		console_data_out(sh->console, buf, rc);
 	}
 
 	if (events & POLLOUT) {
-printf("%d\n", __LINE__);
+printf("%d, %s\n", __LINE__, __FILE__);
 		client_set_blocked(client, false);
 		rc = client_drain_queue(client, 0);
 		if (rc)
