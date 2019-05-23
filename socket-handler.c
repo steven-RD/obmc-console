@@ -294,8 +294,7 @@ static enum poller_ret socket_poll(struct handler *handler,
 			client_ringbuffer_poll, client);
 
 	n = sh->n_clients++;
-	sh->clients = realloc(sh->clients,
-			sizeof(*sh->clients) * sh->n_clients);
+	sh->clients = realloc(sh->clients, sizeof(*sh->clients) * sh->n_clients);
 	sh->clients[n] = client;
 
 	return POLLER_OK;
@@ -336,7 +335,7 @@ static int socket_init(struct handler *handler, struct console *console,
 		warn("Can't listen for incoming connections");
 		return -1;
 	}
-
+printf("%d, %s\n", __LINE__, __FILE__);
 	sh->poller = console_poller_register(console, handler, socket_poll,
 			NULL, sh->sd, POLLIN, NULL);
 

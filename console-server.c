@@ -156,6 +156,8 @@ static int tty_find_device(struct console *console)
 	if (rc < 0)
 		goto out_free;
 printf("console->tty_sysfs_devnode=%s, console->tty_dev=%s, %d\n", console->tty_sysfs_devnode, console->tty_dev, __LINE__);
+// console->tty_sysfs_devnode = /sys/devices/platform/ahb/ahb:apb/1e78400.serial
+// console->tty_dev = /dev/ttyS4
 	rc = 0;
 
 out_free:
@@ -262,6 +264,8 @@ static int tty_init_io(struct console *console)
 				
 	console->tty_fd = open(console->tty_dev, O_RDWR);
 printf("console->tty_dev=%s, console->tty_fd=%d, %d\n", console->tty_dev, console->tty_fd, __LINE__);
+// console->tty_dev = /dev/ttyS4
+// console->tty_fd = 3
 	if (console->tty_fd <= 0) {
 		warn("Can't open tty %s", console->tty_dev);
 		return -1;
@@ -740,12 +744,14 @@ int run_console(struct console *console)
 
 		/* process internal fd first */
 		if (console->pollfds[console->n_pollers].revents) {
+printf("console->tty_fd=%d, %d, %s\n", console->tty_fd, __LINE__, __FILE__);
 			rc = read(console->tty_fd, buf, sizeof(buf));
 			if (rc <= 0) {
 				warn("Error reading from tty device");
 				rc = -1;
 				break;
 			}
+printf("buf=%s, %d, %s\n", buf, console->tty_fd, __LINE__, __FILE__);
 			rc = ringbuffer_queue(console->rb, buf, rc);
 			if (rc)
 				break;
@@ -824,15 +830,15 @@ int main(int argc, char **argv)
 	rc = tty_init(console, config);
 	if (rc)
 		goto out_config_fini;
-
+printf("%d, %s\n", __LINE__, __FILE__);
 	dbus_init(console, config);
-
+printf("%d, %s\n", __LINE__, __FILE__);
 	handlers_init(console, config);
-
+printf("%d, %s\n", __LINE__, __FILE__);
 	rc = run_console(console);
-
+printf("%d, %s\n", __LINE__, __FILE__);
 	handlers_fini(console);
-
+printf("%d, %s\n", __LINE__, __FILE__);
 out_config_fini:
 	config_fini(config);
 
@@ -842,6 +848,6 @@ out_free:
 	free(console->tty_sysfs_devnode);
 	free(console->tty_dev);
 	free(console);
-
+printf("%d, %s\n", __LINE__, __FILE__);
 	return rc == 0 ? EXIT_SUCCESS : EXIT_FAILURE;
 }
