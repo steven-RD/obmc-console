@@ -248,7 +248,7 @@ static enum poller_ret client_poll(struct handler *handler,
 		}
 		if (rc == 0)
 			goto err_close;
-printf("tty_fd=%d,%d, %s, %d\n", client->fd, sh->console->tty_fd, buf, __LINE__);
+printf("client->fd=%d,%s, %d\n", client->fd, buf, __LINE__);
 		console_data_out(sh->console, buf, rc);
 	}
 

@@ -157,7 +157,7 @@ static enum poller_ret tty_poll(struct handler *handler,
 	int rc;
 
 	if (events & POLLIN) {
-printf("%d, %d, %d\n", th->fd, th->console->tty_fd);
+printf("th->fd=%d, %d\n", th->fd, __LINE__);
 		len = read(th->fd, buf, sizeof(buf));
 		if (len <= 0)
 			goto err;
