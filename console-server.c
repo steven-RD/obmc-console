@@ -155,7 +155,7 @@ static int tty_find_device(struct console *console)
 	rc = asprintf(&console->tty_dev, "/dev/%s", tty_kname_real);
 	if (rc < 0)
 		goto out_free;
-
+printf("console->tty_sysfs_devnode=%s, console->tty_dev=%s, %d\n", console->tty_sysfs_devnode, console->tty_dev, __LINE__);
 	rc = 0;
 
 out_free:
@@ -259,8 +259,9 @@ static int tty_init_io(struct console *console)
 	if (console->tty_lpc_addr)
 		tty_set_sysfs_attr(console, "lpc_address",
 				console->tty_lpc_addr);
-
+				
 	console->tty_fd = open(console->tty_dev, O_RDWR);
+printf("console->tty_dev=%s, console->tty_fd=%d, %d\n", console->tty_dev, console->tty_fd, __LINE__);
 	if (console->tty_fd <= 0) {
 		warn("Can't open tty %s", console->tty_dev);
 		return -1;

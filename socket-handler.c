@@ -163,7 +163,7 @@ static int client_drain_queue(struct client *client, size_t force_len)
 		len = ringbuffer_dequeue_peek(client->rbc, total_len, &buf);
 		if (!len)
 			break;
-
+ printf("%s, %d\n", buf, __LINE__);
 		wlen = send_all(client, buf, len, block);
 		if (wlen <= 0)
 			break;
@@ -248,11 +248,12 @@ static enum poller_ret client_poll(struct handler *handler,
 		}
 		if (rc == 0)
 			goto err_close;
-
+printf("tty_fd=%d,%d, %s, %d\n", client->fd, sh->console->tty_fd, buf, __LINE__);
 		console_data_out(sh->console, buf, rc);
 	}
 
 	if (events & POLLOUT) {
+printf("%d\n", __LINE__);
 		client_set_blocked(client, false);
 		rc = client_drain_queue(client, 0);
 		if (rc)
