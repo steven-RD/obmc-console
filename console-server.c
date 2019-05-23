@@ -751,7 +751,7 @@ printf("console->tty_fd=%d, %d, %s\n", console->tty_fd, __LINE__, __FILE__);
 				rc = -1;
 				break;
 			}
-printf("buf=%s, %d, %s\n", buf, console->tty_fd, __LINE__, __FILE__);
+printf("buf=%s, %d, %s\n", buf, __LINE__, __FILE__);
 			rc = ringbuffer_queue(console->rb, buf, rc);
 			if (rc)
 				break;
